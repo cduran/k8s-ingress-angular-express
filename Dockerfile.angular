@@ -7,11 +7,14 @@ FROM node:14 as build
 # Set the working directory
 WORKDIR /app
 
-# Add the source code to app
-COPY ./angular-app/. /app/
+# Copy dependencies files
+COPY ./angular-app/package*.json /app/
 
 # Install all the dependencies
 RUN npm install
+
+# Add the source code to app
+COPY ./angular-app/. /app/
 
 # Generate production build
 RUN npm run build -- --output-path=/app/dist/out --base-href /client/ --configuration production --aot

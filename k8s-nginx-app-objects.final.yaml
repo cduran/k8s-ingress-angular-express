@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-app
+  namespace: angular-express
+spec:
+  selector:
+    matchLabels:
+      app: nginx-app
+  template:
+    metadata:
+      labels:
+        app: nginx-app
+    spec:
+      containers:
+        - name: nginx-app
+          image: minikube:5000/nginx-app
+          ports:
+            - containerPort: 80
+          env:
+          - name: INGRESS_DNS_HOSTNAME
+            value: ngexpressapp.cr
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  namespace: kube-system
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ngexpressapp.cr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-app
+                port:
+                  number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-app
+  namespace: kube-system
+spec:
+  type: ExternalName
+  externalName: nginx-app.angular-express.svc.cluster.local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-app
+  namespace: angular-express
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: nginx-app

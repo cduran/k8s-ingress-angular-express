@@ -8,14 +8,16 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent implements OnInit {
   title = 'angular-app';
+  data = 'Loading...';
+  backendHost = '/api';
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.http
-      .get<any>('http://localhost:3000/data')
-      .subscribe((data) => {
-        this.title = data.total;
+      .get<any>(this.backendHost + '/data')
+      .subscribe((data: any) => {
+        this.data = data;
       });
   }
 }

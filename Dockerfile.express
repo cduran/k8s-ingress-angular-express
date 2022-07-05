@@ -13,6 +13,6 @@ RUN npm install
 COPY  ./express-app /app/
 
 # Run production build
-CMD npm run start
+CMD npm run express
 
 EXPOSE 3000

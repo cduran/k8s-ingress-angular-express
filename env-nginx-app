@@ -1,0 +1,5 @@
+export DEPLOYMENT_NAME=nginx-app
+export INGRESS_NAME=nginx-ingress
+export INGRESS_DNS_HOSTNAME=ngexpressapp.cr
+export CONTAINER_IMAGE=minikube:5000/nginx-app
+export CONTAINER_PORT=80

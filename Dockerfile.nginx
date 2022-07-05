@@ -1,5 +1,5 @@
 # Use official nginx image as the base image
-FROM andresnboza/reload-app-client
+FROM nginx:latest
 
 COPY ./favicon.ico /media/favicon.ico
 
@@ -7,7 +7,7 @@ COPY ./favicon.ico /media/favicon.ico
 # See 'nginx-sso-deployment.yaml.tmpl' file; lines 46-49 and 60-63
 
 # Remove default configuration from nginx image
-# RUN rm /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/conf.d/default.conf
 
 # Copying our base configuration
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf

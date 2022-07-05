@@ -1,0 +1,5 @@
+export DEPLOYMENT_NAME=angular-k8s-app
+export NAMESPACE_NAME=angular-express-nginx
+
+export CONTAINER_IMAGE=minikube:5000/angular-app
+export CONTAINER_PORT=80

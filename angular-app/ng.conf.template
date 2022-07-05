@@ -9,12 +9,12 @@ map $sent_http_content_type $expires {
 }
 
 server {
-    server_name _;
+    # server_name _;
 
     root /usr/share/nginx/html ;
 
     location / {
-        return 301 /client/;
+        index /client/;
     }
     location /client/ {
         alias /usr/share/nginx/html/client/;
