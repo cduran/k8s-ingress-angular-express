@@ -1,0 +1,24 @@
+# Expires map
+map $sent_http_content_type $expires {
+    default                    off;
+    text/html                  epoch;
+    text/css                   max;
+    application/json           max;
+    application/javascript     max;
+    ~image/                    max;
+}
+
+server {
+    root /usr/share/nginx/html ;
+
+    location / {
+        index  /reload/;
+    }
+    location /reload/ {
+        alias /usr/share/nginx/html/reload/;
+        try_files $uri$args $uri$args/ $uri/ /reload/index.html;
+    }
+
+    expires $expires;
+    gzip  on;
+}

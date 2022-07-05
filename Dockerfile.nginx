@@ -1,0 +1,19 @@
+# Use official nginx image as the base image
+FROM andresnboza/reload-app-client
+
+COPY ./favicon.ico /media/favicon.ico
+
+# INFO: SSL certificates are handle in a kubernetes secret.
+# See 'nginx-sso-deployment.yaml.tmpl' file; lines 46-49 and 60-63
+
+# Remove default configuration from nginx image
+# RUN rm /etc/nginx/conf.d/default.conf
+
+# Copying our base configuration
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+
+# Using a nginx configuration template to interpolate variables
+COPY ./nginx/services.conf.template /etc/nginx/templates/services.conf.template
+
+EXPOSE 443
+EXPOSE 80
