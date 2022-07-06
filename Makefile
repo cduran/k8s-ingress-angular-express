@@ -5,7 +5,7 @@ include env-global
 default: build-apps push-apps deploy-to-k8s
 
 cleanup:
-	kubectl delete namespace ${NAMESPACE_NAME}
+	./k8s-util.sh --destroy
 
 build-node-app:
 	docker build -f Dockerfile.node  -t ${REGISTRY_HOSTNAME}/${NODE_APP_NAME} .
@@ -29,7 +29,7 @@ build-apps: build-node-app build-angular-app build-nginx-app
 push-apps: push-node-app push-angular-app push-nginx-app
 
 deploy-to-k8s:
-	./apply-k8s-objects.sh
+	./k8s-util.sh --deploy
 
-deploy-to-k8s-remove-temp-yaml:
-	./apply-k8s-objects.sh --delete-temp-yaml
+deploy-to-k8s-output-yaml:
+	./k8s-util.sh --deploy --output-temp-yaml
