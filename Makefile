@@ -1,54 +1,35 @@
 SHELL = /bin/bash
 
-NAMESPACE_NAME=angular-express
+include env-global
 
-# ifneq (,$(wildcard ./envfile))
-#     include envfile
-#     export
-# endif
-# include env-express-app
-
-
-# source ./env-nginx-app
-
-deployment:
-# substitute env variales in tmpl file and crate a new yaml file with parsed values.
-	envsubst < k8s-express-app-objects.yaml.tmpl > k8s-express-app-objects.yaml
-
-# create defined namespace
-namespace:
-# override NAMESPACE_NAME=yes-override
-# override NAMESPACE_NAME=double-override
-	kubectl create namespace ${NAMESPACE_NAME} --dry-run=client
-
-# # apply created yaml
-# kubectl apply -f k8s-objects.final.yaml
-
-# # waiting for rollout
-# kubectl rollout status deployment/$DEPLOYMENT_NAME -n $NAMESPACE_NAME
+default: build-apps push-apps deploy-to-k8s
 
 cleanup:
 	kubectl delete namespace ${NAMESPACE_NAME}
 
-
-
-build-express-app:
-	docker build -f Dockerfile.express  -t minikube:5000/express-app .
+build-node-app:
+	docker build -f Dockerfile.node  -t ${REGISTRY_HOSTNAME}/${NODE_APP_NAME} .
 
 build-angular-app:
-	docker build -f Dockerfile.angular  -t minikube:5000/angular-app .
+	docker build -f Dockerfile.angular  -t ${REGISTRY_HOSTNAME}/${ANGULAR_APP_NAME} .
 
 build-nginx-app:
-	docker build -f Dockerfile.nginx  -t minikube:5000/nginx-app .
+	docker build -f Dockerfile.nginx  -t ${REGISTRY_HOSTNAME}/${NGINX_APP_NAME} .
 
-push-express-app:
-	docker push minikube:5000/express-app
+push-node-app:
+	docker push ${REGISTRY_HOSTNAME}/${NODE_APP_NAME}
 
 push-angular-app:
-	docker push minikube:5000/angular-app
+	docker push ${REGISTRY_HOSTNAME}/${ANGULAR_APP_NAME}
 
 push-nginx-app:
-	docker push minikube:5000/nginx-app
+	docker push ${REGISTRY_HOSTNAME}/${NGINX_APP_NAME}
 
-build-to-minikube: build-express-app build-angular-app build-nginx-app
-push-to-minikube: push-express-app push-angular-app	push-nginx-app
+build-apps: build-node-app build-angular-app build-nginx-app
+push-apps: push-node-app push-angular-app push-nginx-app
+
+deploy-to-k8s:
+	./apply-k8s-objects.sh
+
+deploy-to-k8s-remove-temp-yaml:
+	./apply-k8s-objects.sh --delete-temp-yaml

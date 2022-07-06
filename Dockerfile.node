@@ -1,16 +1,16 @@
-FROM node:14
+FROM node:14-alpine
 
 # Set the working directory
 WORKDIR /app
 
 # Copy package.json
-COPY ./express-app/package*.json /app/
+COPY ./node-app/package*.json /app/
 
 # Install dependencies
 RUN npm install
 
 # Add the source code to app
-COPY  ./express-app /app/
+COPY  ./node-app /app/
 
 # Run production build
 CMD npm run express
