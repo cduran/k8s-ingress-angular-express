@@ -29,6 +29,6 @@ spec:
       port: ${CONTAINER_PORT}
       targetPort: ${CONTAINER_PORT}
       protocol: TCP
-  type: NodePort
+  type: ClusterIP
   selector:
     app: ${DEPLOYMENT_NAME}

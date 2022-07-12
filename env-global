@@ -1,11 +1,17 @@
 export NAMESPACE_NAME=complete-deployment
 export REGISTRY_HOSTNAME=minikube:5000
-export ANGULAR_APP_NAME=angular-app
-export ANGULAR_APP_PORT=80
-export NODE_APP_NAME=express-app
+
+export ANGULAR_APP_DEPLOYMENT_NAME=angular-app
+export ANGULAR_APP_NAME=angular-container-app
+export NG_APP_PORT=8080
+
+export NODE_APP_DEPLOYMENT_NAME=express-app
+export NODE_APP_NAME=express-container-app
 export NODE_APP_PORT=3000
 
-export NGINX_APP_NAME=nginx-app
-export NGINX_APP_PORT=80
+export NGINX_APP_DEPLOYMENT_NAME=nginx-app
+export NGINX_APP_NAME=nginx-container-app
+export NGINX_APP_HTTP_PORT=80
+export NGINX_APP_HTTPS_PORT=443
 export INGRESS_NAME_FOR_NGINX_APP=nginx-ingress
-export INGRESS_DOMAIN_FOR_NGINX_APP=ngexpressapp.cr
+export INGRESS_DOMAIN_FOR_NGINX_APP=custom-url-c0a8400d.nip.io

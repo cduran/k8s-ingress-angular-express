@@ -1,6 +1,15 @@
 # Use official nginx image as the base image
 FROM nginx:latest
 
+ARG NGINX_APP_HTTP_PORT=${NGINX_APP_HTTP_PORT}
+ENV NGINX_APP_HTTP_PORT=${NGINX_APP_HTTP_PORT}
+ARG NGINX_APP_HTTPS_PORT=${NGINX_APP_HTTPS_PORT}
+ENV NGINX_APP_HTTPS_PORT=${NGINX_APP_HTTPS_PORT}
+ARG NG_APP_PORT=${NG_APP_PORT}
+ENV NG_APP_PORT=${NG_APP_PORT}
+ARG NODE_APP_PORT=${NODE_APP_PORT}
+ENV NODE_APP_PORT=${NODE_APP_PORT}
+
 COPY ./favicon.ico /media/favicon.ico
 
 # INFO: SSL certificates are handle in a kubernetes secret.
@@ -15,5 +24,5 @@ COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 # Using a nginx configuration template to interpolate variables
 COPY ./nginx/services.conf.template /etc/nginx/templates/services.conf.template
 
-EXPOSE 443
-EXPOSE 80
+EXPOSE ${NGINX_APP_HTTP_PORT}
+EXPOSE ${NGINX_APP_HTTPS_PORT}

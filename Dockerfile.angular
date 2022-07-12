@@ -2,7 +2,7 @@
 
 # Stage 1: Compile and Build angular codebase
 # Use official node image as the base image
-FROM node:14 as build
+FROM node:14-alpine as build
 
 # Set the working directory
 WORKDIR /app
@@ -24,6 +24,9 @@ RUN npm run build -- --output-path=/app/dist/out --base-href /client/ --configur
 # Use official nginx image as the base image
 FROM nginx:latest
 
+ARG NG_APP_PORT=${NG_APP_PORT}
+ENV NG_APP_PORT=${NG_APP_PORT}
+
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Using a nginx configuration template to interpolate variables
@@ -33,5 +36,4 @@ COPY ./angular-app/ng.conf.template /etc/nginx/templates/ng.conf.template
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build /app/dist/out/* /usr/share/nginx/html/client/
 
-# Expose port 80
-EXPOSE 80
+EXPOSE ${NG_APP_PORT}

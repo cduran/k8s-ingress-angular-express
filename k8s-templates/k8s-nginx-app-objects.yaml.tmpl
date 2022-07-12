@@ -16,7 +16,10 @@ spec:
         - name: ${DEPLOYMENT_NAME}
           image: ${CONTAINER_IMAGE}
           ports:
-            - containerPort: ${CONTAINER_PORT}
+            - name: http
+              containerPort: ${NGINX_APP_HTTP_PORT}
+            - name: https
+              containerPort: ${NGINX_APP_HTTPS_PORT}
           env:
           - name: INGRESS_DNS_HOSTNAME
             value: ${INGRESS_DNS_HOSTNAME}
@@ -26,8 +29,14 @@ kind: Ingress
 metadata:
   name: ${INGRESS_NAME}
   namespace: kube-system
+  annotations:
+    cert-manager.io/cluster-issuer: "ca-issuer"
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - ${INGRESS_DNS_HOSTNAME}
+    secretName: test-cert-tls  
   rules:
     - host: ${INGRESS_DNS_HOSTNAME}
       http:
@@ -58,8 +67,12 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: ${CONTAINER_PORT}
+      targetPort: ${NGINX_APP_HTTP_PORT}
       protocol: TCP
-  type: NodePort
+    - name: https
+      port: 443
+      targetPort: ${NGINX_APP_HTTPS_PORT}
+      protocol: TCP
+  type: ClusterIP
   selector:
     app: ${DEPLOYMENT_NAME}

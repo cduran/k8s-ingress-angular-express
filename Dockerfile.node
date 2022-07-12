@@ -1,5 +1,8 @@
 FROM node:14-alpine
 
+ARG NODE_APP_PORT=${NODE_APP_PORT}
+ENV NODE_APP_PORT=${NODE_APP_PORT}
+
 # Set the working directory
 WORKDIR /app
 
@@ -15,4 +18,4 @@ COPY  ./node-app /app/
 # Run production build
 CMD npm run express
 
-EXPOSE 3000
+EXPOSE ${NODE_APP_PORT}
